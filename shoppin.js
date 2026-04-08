@@ -1,77 +1,74 @@
-const itemInput = document.getElementById('itemInput');
-const addBtn = document.getElementById('addBtn');
-const priceInput = document.getElementById('priceInput');
-const sortBtn = document.getElementById('sortBtn');
-const shoppingList = document.getElementById('shoppingList');
-const totalCostEl = document.getElementById('totalCost');
-const clearBtn = document.getElementById('clearBtn');
+const $ = id => document.getElementById(id);
 
-let total = 0;
+const itemInput    = $('itemInput');
+const priceInput   = $('priceInput');
+const addBtn       = $('addBtn');
+const sortBtn      = $('sortBtn');
+const clearBtn     = $('clearBtn');
+const shoppingList = $('shoppingList');
+const totalCostEl  = $('totalCost');
 
-function addItem() {
-    const itemName = itemInput.value.trim();
-    
-    if (itemName === "") {
-        alert("Please enter an item!");
-        return;
-    }
 
-    const price = parseFloat(priceInput.value);
-    
-    if (isNaN(price)) {
-        alert("Please enter a valid number for the price.");
-        return;
-    }
+let items = [];
 
-    const existingItems = Array.from(shoppingList.children).map(li => li.querySelector('span').textContent.split(' - ')[0]);
-    if (existingItems.includes(itemName)) {
-        alert("This item is already in the list!");
-        return;
-    }
-    
+function render() {
+    shoppingList.innerHTML = '';
+    let total = 0;
 
-    const li = document.createElement('li');
-    li.innerHTML = `
-        <span>${itemName} - $${price.toFixed(2)}</span>
-        <span class="delete-item">✕</span>
-    `;
-
-    li.querySelector('.delete-item').addEventListener('click', () => {
-        total -= price;
-        updateTotal();
-        li.remove();
+    items.forEach((item, index) => {
+        total += item.price;
+        
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <span>${item.name} - $${item.price.toFixed(2)}</span>
+            <button class="delete-btn" data-index="${index}">✕</button>
+        `;
+        shoppingList.appendChild(li);
     });
 
-    shoppingList.appendChild(li);
-    
-    total += price;
-    updateTotal();
-
-  
-    itemInput.value = "";
-    itemInput.focus();
-}
-
-function updateTotal() {
     totalCostEl.textContent = total.toFixed(2);
 }
 
-addBtn.addEventListener('click', addItem);
+function addItem() {
+    const name = itemInput.value.trim();
+    const price = parseFloat(priceInput.value);
 
+    if (!name || isNaN(price)) {
+        alert("Enter a valid name and price!");
+        return;
+    }
 
+    if (items.some(i => i.name.toLowerCase() === name.toLowerCase())) {
+        alert("That's already on the list.");
+        return;
+    }
+
+    items.push({ name, price });
+    render();
+
+    itemInput.value = '';
+    priceInput.value = '';
+    itemInput.focus();
+}
+
+shoppingList.addEventListener('click', (e) => {
+    if (e.target.classList.contains('delete-btn')) {
+        const index = e.target.dataset.index;
+        items.splice(index, 1);
+        render();
+    }
+});
+
+sortBtn.addEventListener('click', () => {
+    items.sort((a, b) => a.price - b.price);
+    render();
+});
 
 clearBtn.addEventListener('click', () => {
-    shoppingList.innerHTML = "";
-    total = 0;
-    updateTotal();
+    if (confirm("Clear the whole list?")) {
+        items = [];
+        render();
+    }
 });
-sortBtn.addEventListener('click', () => {
-    const items = Array.from(shoppingList.children);
-    items.sort((a, b) => {
-        const priceA = parseFloat(a.querySelector('span').textContent.split(' - $')[1]);
-        const priceB = parseFloat(b.querySelector('span').textContent.split(' - $')[1]);
-        return priceA - priceB;
-    });
-    shoppingList.innerHTML = "";
-    items.forEach(item => shoppingList.appendChild(item));
-});
+
+addBtn.addEventListener('click', addItem);
