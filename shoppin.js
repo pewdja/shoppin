@@ -19,7 +19,7 @@ function render() {
         
         const li = document.createElement('li');
         li.innerHTML = `
-            <span>${item.name} - $${item.price.toFixed(2)}</span>
+            <span>${item.name} - ksh${item.price.toFixed(2)}</span>
             <button class="delete-btn" data-index="${index}">✕</button>
         `;
         shoppingList.appendChild(li);
