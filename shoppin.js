@@ -8,8 +8,7 @@ const clearBtn     = $('clearBtn');
 const shoppingList = $('shoppingList');
 const totalCostEl  = $('totalCost');
 
-
-let items = [];
+let items = JSON.parse(localStorage.getItem('shoppingData')) || [];
 
 function render() {
     shoppingList.innerHTML = '';
@@ -27,6 +26,9 @@ function render() {
     });
 
     totalCostEl.textContent = total.toFixed(2);
+
+  
+    localStorage.setItem('shoppingData', JSON.stringify(items));
 }
 
 function addItem() {
@@ -72,3 +74,5 @@ clearBtn.addEventListener('click', () => {
 });
 
 addBtn.addEventListener('click', addItem);
+
+render();

@@ -1,0 +1,66 @@
+body {
+    background: #f4f4f4;
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    padding-top: 50px;
+}
+
+.container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    width: 350px;
+}
+
+.input-group {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 15px;
+}
+
+input {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#itemInput { flex: 2; }
+#priceInput { flex: 1; }
+
+button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#addBtn { background: #28a745; color: white; }
+
+ul {
+    padding: 0;
+    list-style: none;
+}
+
+li {
+    background: #fafafa;
+    border-bottom: 1px solid #eee;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.delete-btn { color: #dc3545; background: none; }
+
+.total {
+    text-align: right;
+    font-weight: bold;
+    margin: 15px 0;
+}
+
+.clear-btn { background: #6c757d; color: white; width: 48%; }
+.sort-btn { background: #007bff; color: white; width: 48%; float: right; }
+
